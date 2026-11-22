@@ -144,7 +144,7 @@ function drawShootingStar(star, elapsed) {
   const b = star.b;
   const c = star.c;
   const p = pointOnQuadratic(a, c, b, Math.min(1, t));
-  const prevT = Math.max(0, t - 0.08);
+  const prevT = Math.max(0, t - 0.18);
   const prev = pointOnQuadratic(a, c, b, prevT);
 
   ctx.save();
@@ -169,13 +169,9 @@ function drawShootingStar(star, elapsed) {
 
 function createStars(geom) {
   const stars = geom.stems.map((stem, i) => ({
-    a: i % 2 === 0
-      ? { x: -40, y: height * (0.28 + i * 0.08) }
-      : { x: width + 40, y: height * (0.22 + i * 0.1) },
-    c: i % 2 === 0
-      ? { x: width * (0.23 + i * 0.05), y: height * (0.12 + i * 0.04) }
-      : { x: width * (0.78 - i * 0.04), y: height * (0.1 + i * 0.05) },
-    b: pointOnQuadratic(stem.a, stem.c, stem.b, 1),
+    a: stem.a,
+    c: stem.c,
+    b: stem.b,
     color: stem.color,
     delay: 350 + i * 420,
     duration: 1500
@@ -183,11 +179,9 @@ function createStars(geom) {
 
   geom.flowers.forEach((flower, i) => {
     stars.push({
-      a: i % 2 === 0
-        ? { x: -30, y: height * (0.18 + i * 0.12) }
-        : { x: width + 30, y: height * (0.12 + i * 0.13) },
-      c: { x: flower.x + (i % 2 ? -120 : 120) * geom.s, y: flower.y - 180 * geom.s },
-      b: flower,
+      a: { x: flower.x - flower.r * 0.78, y: flower.y },
+      c: { x: flower.x, y: flower.y - flower.r * 0.92 },
+      b: { x: flower.x + flower.r * 0.78, y: flower.y },
       color: flower.color,
       delay: 1800 + i * 260,
       duration: 1100
