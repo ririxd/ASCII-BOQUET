@@ -8,7 +8,7 @@ let height = 0;
 let dpr = 1;
 let raf = 0;
 let start = 0;
-const loopDuration = 4600;
+const loopDuration = 6000;
 
 const colors = ['#ff45ca', '#ff87d5', '#9d63ff', '#53d7ff', '#65ffcb', '#ffe16a'];
 
@@ -41,15 +41,23 @@ function bouquetGeometry() {
     { a: { x: cx - 18 * s, y: cy + 190 * s }, c: { x: cx - 100 * s, y: cy + 20 * s }, b: { x: cx - 125 * s, y: cy - 175 * s }, color: '#65ffcb' },
     { a: { x: cx, y: cy + 190 * s }, c: { x: cx + 5 * s, y: cy - 20 * s }, b: { x: cx + 2 * s, y: cy - 230 * s }, color: '#65ffcb' },
     { a: { x: cx + 25 * s, y: cy + 185 * s }, c: { x: cx + 130 * s, y: cy + 15 * s }, b: { x: cx + 145 * s, y: cy - 155 * s }, color: '#53d7ff' },
-    { a: { x: cx + 42 * s, y: cy + 175 * s }, c: { x: cx + 175 * s, y: cy + 20 * s }, b: { x: cx + 220 * s, y: cy - 75 * s }, color: '#65ffcb' }
+    { a: { x: cx + 42 * s, y: cy + 175 * s }, c: { x: cx + 175 * s, y: cy + 20 * s }, b: { x: cx + 220 * s, y: cy - 75 * s }, color: '#65ffcb' },
+    { a: { x: cx - 8 * s, y: cy + 185 * s }, c: { x: cx - 120 * s, y: cy + 45 * s }, b: { x: cx - 172 * s, y: cy - 135 * s }, color: '#65ffcb' },
+    { a: { x: cx - 2 * s, y: cy + 185 * s }, c: { x: cx - 35 * s, y: cy + 20 * s }, b: { x: cx - 61 * s, y: cy - 202 * s }, color: '#53d7ff' },
+    { a: { x: cx + 8 * s, y: cy + 185 * s }, c: { x: cx + 55 * s, y: cy + 20 * s }, b: { x: cx + 73 * s, y: cy - 193 * s }, color: '#65ffcb' },
+    { a: { x: cx + 12 * s, y: cy + 180 * s }, c: { x: cx + 120 * s, y: cy + 45 * s }, b: { x: cx + 183 * s, y: cy - 115 * s }, color: '#53d7ff' }
   ];
 
   const flowers = [
-    { type: 'tulip', x: cx - 220 * s, y: cy - 95 * s, r: 58 * s, petals: 7, color: '#ff45ca', inner: '#ffe16a', phase: 0.1 },
-    { type: 'rose', x: cx - 125 * s, y: cy - 175 * s, r: 68 * s, petals: 8, color: '#9d63ff', inner: '#ff87d5', phase: 0.5 },
-    { type: 'rose', x: cx + 2 * s, y: cy - 230 * s, r: 78 * s, petals: 9, color: '#ff87d5', inner: '#fff09a', phase: 0.9 },
-    { type: 'tulip', x: cx + 145 * s, y: cy - 155 * s, r: 64 * s, petals: 8, color: '#53d7ff', inner: '#ff87d5', phase: 1.3 },
-    { type: 'rose', x: cx + 220 * s, y: cy - 75 * s, r: 55 * s, petals: 7, color: '#ffe16a', inner: '#ff45ca', phase: 1.7 }
+    { x: cx - 220 * s, y: cy - 95 * s, r: 58 * s, petals: 7, color: '#ff45ca', inner: '#ffe16a', phase: 0.1 },
+    { type: 'tulip', x: cx - 172 * s, y: cy - 135 * s, r: 38 * s, petals: 7, color: '#ff87d5', inner: '#ffe16a', phase: 0.3 },
+    { x: cx - 125 * s, y: cy - 175 * s, r: 68 * s, petals: 8, color: '#9d63ff', inner: '#ff87d5', phase: 0.5 },
+    { type: 'rose', x: cx - 61 * s, y: cy - 202 * s, r: 44 * s, petals: 7, color: '#ff45ca', inner: '#ff87d5', phase: 0.7 },
+    { x: cx + 2 * s, y: cy - 230 * s, r: 78 * s, petals: 9, color: '#ff87d5', inner: '#fff09a', phase: 0.9 },
+    { type: 'tulip', x: cx + 73 * s, y: cy - 193 * s, r: 46 * s, petals: 7, color: '#53d7ff', inner: '#fff09a', phase: 1.1 },
+    { x: cx + 145 * s, y: cy - 155 * s, r: 64 * s, petals: 8, color: '#53d7ff', inner: '#ff87d5', phase: 1.3 },
+    { type: 'rose', x: cx + 183 * s, y: cy - 115 * s, r: 38 * s, petals: 7, color: '#ff45ca', inner: '#ffe16a', phase: 1.5 },
+    { x: cx + 220 * s, y: cy - 75 * s, r: 55 * s, petals: 7, color: '#ffe16a', inner: '#ff45ca', phase: 1.7 }
   ];
 
   return { s, cx, cy, stems, flowers };
