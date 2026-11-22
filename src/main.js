@@ -45,11 +45,11 @@ function bouquetGeometry() {
   ];
 
   const flowers = [
-    { x: cx - 220 * s, y: cy - 95 * s, r: 58 * s, petals: 7, color: '#ff45ca', inner: '#ffe16a', phase: 0.1 },
-    { x: cx - 125 * s, y: cy - 175 * s, r: 68 * s, petals: 8, color: '#9d63ff', inner: '#ff87d5', phase: 0.5 },
-    { x: cx + 2 * s, y: cy - 230 * s, r: 78 * s, petals: 9, color: '#ff87d5', inner: '#fff09a', phase: 0.9 },
-    { x: cx + 145 * s, y: cy - 155 * s, r: 64 * s, petals: 8, color: '#53d7ff', inner: '#ff87d5', phase: 1.3 },
-    { x: cx + 220 * s, y: cy - 75 * s, r: 55 * s, petals: 7, color: '#ffe16a', inner: '#ff45ca', phase: 1.7 }
+    { type: 'tulip', x: cx - 220 * s, y: cy - 95 * s, r: 58 * s, petals: 7, color: '#ff45ca', inner: '#ffe16a', phase: 0.1 },
+    { type: 'rose', x: cx - 125 * s, y: cy - 175 * s, r: 68 * s, petals: 8, color: '#9d63ff', inner: '#ff87d5', phase: 0.5 },
+    { type: 'rose', x: cx + 2 * s, y: cy - 230 * s, r: 78 * s, petals: 9, color: '#ff87d5', inner: '#fff09a', phase: 0.9 },
+    { type: 'tulip', x: cx + 145 * s, y: cy - 155 * s, r: 64 * s, petals: 8, color: '#53d7ff', inner: '#ff87d5', phase: 1.3 },
+    { type: 'rose', x: cx + 220 * s, y: cy - 75 * s, r: 55 * s, petals: 7, color: '#ffe16a', inner: '#ff45ca', phase: 1.7 }
   ];
 
   return { s, cx, cy, stems, flowers };
@@ -96,6 +96,48 @@ function drawPetals(flower, progress, time) {
   ctx.globalAlpha = Math.min(1, progress * 1.8);
 
   const reveal = Math.min(1, progress);
+  if (flower.type === 'tulip') {
+    ctx.scale(reveal, reveal);
+    ctx.beginPath();
+    ctx.moveTo(-flower.r * 0.62, flower.r * 0.12);
+    ctx.bezierCurveTo(-flower.r * 0.76, -flower.r * 0.42, -flower.r * 0.44, -flower.r * 0.58, -flower.r * 0.2, -flower.r * 0.16);
+    ctx.bezierCurveTo(-flower.r * 0.08, -flower.r * 0.72, flower.r * 0.08, -flower.r * 0.72, flower.r * 0.2, -flower.r * 0.16);
+    ctx.bezierCurveTo(flower.r * 0.44, -flower.r * 0.58, flower.r * 0.76, -flower.r * 0.42, flower.r * 0.62, flower.r * 0.12);
+    ctx.quadraticCurveTo(flower.r * 0.5, flower.r * 0.7, 0, flower.r * 0.82);
+    ctx.quadraticCurveTo(-flower.r * 0.5, flower.r * 0.7, -flower.r * 0.62, flower.r * 0.12);
+    ctx.fillStyle = flower.color;
+    ctx.shadowColor = flower.color;
+    ctx.shadowBlur = 22;
+    ctx.fill();
+    ctx.strokeStyle = flower.inner;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+    return;
+  }
+
+  if (flower.type === 'rose') {
+    ctx.scale(reveal, reveal);
+    for (let layer = 0; layer < 3; layer++) {
+      const count = flower.petals - layer * 2;
+      const radius = flower.r * (0.25 + layer * 0.18);
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + flower.phase + layer * 0.4;
+        ctx.save();
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.ellipse(radius, 0, flower.r * (0.34 - layer * 0.06), flower.r * (0.2 - layer * 0.03), 0, 0, Math.PI * 2);
+        ctx.fillStyle = layer === 0 ? flower.inner : flower.color;
+        ctx.shadowColor = flower.color;
+        ctx.shadowBlur = 20;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+    ctx.restore();
+    return;
+  }
+
   for (let i = 0; i < flower.petals; i++) {
     const angle = (Math.PI * 2 * i) / flower.petals + flower.phase * 0.12;
     ctx.save();
