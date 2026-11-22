@@ -167,7 +167,7 @@ function drawShootingStar(star, elapsed) {
   ctx.restore();
 }
 
-function createStars(geom) {
+function createStars(geom, leafPairs) {
   const stars = geom.stems.map((stem, i) => ({
     a: stem.a,
     c: stem.c,
@@ -187,13 +187,24 @@ function createStars(geom) {
       duration: 1100
     });
   });
+
+  leafPairs.forEach((leaf, i) => {
+    stars.push({
+      a: leaf[0],
+      c: leaf[2],
+      b: leaf[1],
+      color: i % 2 ? '#53d7ff' : '#65ffcb',
+      delay: 2300 + i * 180,
+      duration: 700
+    });
+  });
+
   return stars;
 }
 
 function animate(time) {
   ctx.clearRect(0, 0, width, height);
   const geom = bouquetGeometry();
-  const stars = createStars(geom);
   const elapsed = (time - start) % loopDuration;
 
   for (let i = 0; i < 48; i++) {
@@ -218,9 +229,10 @@ function animate(time) {
     [{ x: geom.cx + 15 * geom.s, y: geom.cy + 75 * geom.s }, { x: geom.cx - 65 * geom.s, y: geom.cy - 20 * geom.s }, { x: geom.cx - 20 * geom.s, y: geom.cy - 5 * geom.s }],
     [{ x: geom.cx + 55 * geom.s, y: geom.cy + 60 * geom.s }, { x: geom.cx + 195 * geom.s, y: geom.cy - 12 * geom.s }, { x: geom.cx + 145 * geom.s, y: geom.cy - 10 * geom.s }]
   ];
+  const stars = createStars(geom, leafPairs);
 
   leafPairs.forEach((leaf, i) => {
-    const progress = Math.min(1, Math.max(0, (elapsed - 1100 - i * 180) / 700));
+    const progress = Math.min(1, Math.max(0, (elapsed - 2300 - i * 180) / 700));
     drawLeaf(leaf[0], leaf[1], leaf[2], i % 2 ? '#53d7ff' : '#65ffcb', progress);
   });
 
