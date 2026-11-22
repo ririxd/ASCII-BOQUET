@@ -2,13 +2,13 @@ import './style.css';
 
 const canvas = document.querySelector('#bouquet');
 const ctx = canvas.getContext('2d');
-const replay = document.querySelector('#replay');
 
 let width = 0;
 let height = 0;
 let dpr = 1;
 let raf = 0;
 let start = 0;
+const loopDuration = 4600;
 
 const colors = ['#ff45ca', '#ff87d5', '#9d63ff', '#53d7ff', '#65ffcb', '#ffe16a'];
 
@@ -135,10 +135,10 @@ function drawLeaf(a, b, c, color, progress) {
   ctx.restore();
 }
 
-function drawShootingStar(star, time) {
+function drawShootingStar(star, elapsed) {
   const duration = star.duration;
-  const t = ((time - start - star.delay) / duration);
-  if (t < 0 || t > 1.15) return;
+  const t = (elapsed - star.delay) / duration;
+  if (t < 0 || t > 1) return;
 
   const a = star.a;
   const b = star.b;
@@ -200,6 +200,7 @@ function animate(time) {
   ctx.clearRect(0, 0, width, height);
   const geom = bouquetGeometry();
   const stars = createStars(geom);
+  const elapsed = (time - start) % loopDuration;
 
   for (let i = 0; i < 48; i++) {
     const seed = i * 91.7;
@@ -213,7 +214,7 @@ function animate(time) {
   }
 
   geom.stems.forEach((stem, i) => {
-    const progress = Math.min(1, Math.max(0, (time - start - 350 - i * 420) / 1500));
+    const progress = Math.min(1, Math.max(0, (elapsed - 350 - i * 420) / 1500));
     drawStem(stem, progress);
   });
 
@@ -225,18 +226,18 @@ function animate(time) {
   ];
 
   leafPairs.forEach((leaf, i) => {
-    const progress = Math.min(1, Math.max(0, (time - start - 1100 - i * 180) / 700));
+    const progress = Math.min(1, Math.max(0, (elapsed - 1100 - i * 180) / 700));
     drawLeaf(leaf[0], leaf[1], leaf[2], i % 2 ? '#53d7ff' : '#65ffcb', progress);
   });
 
   geom.flowers.forEach((flower, i) => {
-    const progress = Math.min(1, Math.max(0, (time - start - 1750 - i * 260) / 900));
+    const progress = Math.min(1, Math.max(0, (elapsed - 1750 - i * 260) / 900));
     drawPetals(flower, progress, time);
   });
 
-  stars.forEach(star => drawShootingStar(star, time));
+  stars.forEach(star => drawShootingStar(star, elapsed));
 
-  const ribbonProgress = Math.min(1, Math.max(0, (time - start - 3200) / 900));
+  const ribbonProgress = Math.min(1, Math.max(0, (elapsed - 3200) / 900));
   if (ribbonProgress > 0) {
     const { cx, cy, s } = geom;
     ctx.save();
@@ -255,16 +256,7 @@ function animate(time) {
   raf = requestAnimationFrame(animate);
 }
 
-function replayAnimation() {
-  cancelAnimationFrame(raf);
-  start = performance.now();
-  raf = requestAnimationFrame(animate);
-  replay.classList.remove('clicked');
-  void replay.offsetWidth;
-  replay.classList.add('clicked');
-}
-
 window.addEventListener('resize', resize);
-replay.addEventListener('click', replayAnimation);
 resize();
-replayAnimation();
+start = performance.now();
+raf = requestAnimationFrame(animate);
